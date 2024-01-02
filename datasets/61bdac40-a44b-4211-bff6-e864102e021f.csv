@@ -1,0 +1,2 @@
+1;"infection chain";"TA577 ICEDID (BOKBOT)";"thread-hijacked email, which contains a link for zip download, which gets into the downloaded zip, which is extracted into a .js file and then retrieves IcedID installer, this gets to IcedID infection with BackConnect traffic";"https://www.malware-traffic-analysis.net/2023/10/16/index.html"
+2;"analyze url";"hxxps://flashnewsbensedira[.]com/el/";"Suspected IcedID infection: URL from emails for the initial zip archive reported to URLHAUS.";"https://www.malware-traffic-analysis.net/2023/10/16/index.html"
