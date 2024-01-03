@@ -1,3 +1,4 @@
+git+https://github.com/arnmnamel/nlp-gym.git
 fastapi
 huggingface_hub
 transformers
@@ -70,4 +71,5 @@ wrapt==1.16.0
 uvicorn
 plotly
 dash
+unicorn
 unicorn

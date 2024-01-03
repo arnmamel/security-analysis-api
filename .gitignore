@@ -163,5 +163,8 @@ cython_debug/
 app/models/llm/tr/*
 app/models/llm/or/*
 tfgrcaai/*
-source/Scripts/*
+source/*
 tmp/*
+dep/*
+logs/*
+registres/*

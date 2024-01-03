@@ -9,6 +9,7 @@ WORKDIR /usr/src/app
 
 # Clone the necessary GitHub repositories
 RUN for i in {1..5}; do git clone https://github.com/arnmamel/security-analysis-api.git && break || sleep 5; done
+RUN for i in {1..5}; do git clone https://github.com/arnmamel/nlp-gym.git && break || sleep 5; done
 
 # Install dependencies from the first repository
 WORKDIR /usr/src/app/security-analysis-api
