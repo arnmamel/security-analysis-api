@@ -68,8 +68,6 @@ wget==3.2
 wikipedia-api==0.6.0
 wrapt==1.16.0
 uvicorn
-git+https://github.com/arnmnamel/nlp-gym.git
-nlp-gymnasium
 plotly
 dash
 unicorn

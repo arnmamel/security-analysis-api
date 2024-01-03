@@ -84,3 +84,22 @@ input[type='text'] {
     color: #333; /* Canviat de vermell a un to més neutral */
     margin-top: 20px;
 }
+
+#circle-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+#indicator-carga.green #circle-indicator {
+    background-color: green;
+}
+
+#indicator-carga.red #circle-indicator {
+    background-color: red;
+}
+
+#indicator-text {
+    margin: 0;
+}

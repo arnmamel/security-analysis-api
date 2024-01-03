@@ -12,6 +12,7 @@ import os
 import json
 import uuid
 import logging
+from .llm_model import inicialitzaModelLLM, generaRespostesLLM
 
 # Configura el logger amb el mateix format i nom que el de main.py
 logger = logging.getLogger('dash')
@@ -44,48 +45,6 @@ class QASC_json(QADataPool):
             samples.append(sample)
 
         return QASC(samples)
-
-def generate_llm_responses(input_text, num_responses=4, model_path=''):
-    """
-    Genera respostes utilitzant LLM.
-    :param input_text: Text pel qual es generen les respostes.
-    :param num_responses: Nombre de respostes a generar.
-    :param model_path: Ruta al model LLM.
-    :return: Una llista de respostes generades.
-    :raises: Excepció si no es troben els fitxers del model o si es produeix un error en el processament.
-    """
-    logger.info("Iniciant la generació de respostes amb LLM...")
-    # Construïm la ruta cap al model de RL
-    model_path = os.path.join(os.getcwd(), 'app', 'models', 'llm', 'tr')
-
-    # Comprovem si el directori del model existeix
-    if not os.path.exists(model_path):
-        raise FileNotFoundError(f"No s'ha pogut trobar el model LLM a {model_path}")
-    else:
-        try:
-            # Carreguem el tokenizer i el model
-            tokenizer = AutoTokenizer.from_pretrained('MBZUAI/LaMini-T5-738M')
-            model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
-            llm_pipe = pipeline('text2text-generation', model=model, tokenizer=tokenizer)
-
-            # Generem les respostes
-            responses = []
-            unique_responses = set()  # Un conjunt per emmagatzemar respostes úniques
-            while len(unique_responses) < num_responses:
-                logger.info(f"Intentant generar resposta única {len(unique_responses) + 1} de {num_responses}...")
-                response = llm_pipe(input_text, max_length=512, do_sample=True)[0]['generated_text']
-                
-                # Comprovem si la resposta ja existeix
-                if response not in unique_responses:
-                    unique_responses.add(response)  # Afegim la resposta única al conjunt
-
-            responses = list(unique_responses)  # Convertim el conjunt a llista
-            logger.info("Respostes generades amb èxit.")
-            return responses
-
-        except Exception as e:
-            logger.error(f"S'ha produït un error durant la generació de respostes del CiberVigilant: {str(e)}")
-            raise Exception(f"S'ha produït un error durant la generació de respostes del CiberVigilant: {str(e)}")
 
 def create_jsonl_entries(llm_responses, input_text, h1=None, h2=None):
     # Definició del directori on es desaran les dades
@@ -180,21 +139,27 @@ def process_with_rl(nom_fitxer):
         env.render()
     env.close()
 
-def pregunta_vigilant(question_text: str, fact1: str = None, fact2: str = None):
+def pregunta_vigilant(question_text: str, fact1: str = None, fact2: str = None, llm_pipe = None):
     logger.info(f"El backend rep la pregunta: {question_text}")
     
-    # Construcció del camí cap al model RL
-    rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model.zip')
+    try:
+        # Construcció del camí cap al model RL
+        rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model.zip')
 
-    # Carregar el model RL
-    if not os.path.exists(rl_model_path):
-        raise Exception(f"Fitxer del model RL no trobat a {rl_model_path}")
+        # Carregar el model RL
+        if not os.path.exists(rl_model_path):
+            raise Exception(f"Fitxer del model RL no trobat a {rl_model_path}")
 
-    rl_model = DQN.load(rl_model_path)
-
+        rl_model = DQN.load(rl_model_path)
+    except Exception as error:
+        raise Exception(f"Error inicialitzant model de RL: {error}")
     # Generar respostes de LLM
     try:
-        llm_responses = generate_llm_responses(question_text, num_responses=4)
+        if llm_pipe is None:
+            logger.info("Inicialitzant el model LLM...")
+            llm_pipe = inicialitzaModelLLM()
+            
+        llm_responses = generaRespostesLLM(question_text, llm_pipeline=llm_pipe, num_responses=4)
     except Exception as error:
         raise Exception(f"Error generant respostes de LLM: {error}")
 
@@ -216,6 +181,7 @@ def pregunta_vigilant(question_text: str, fact1: str = None, fact2: str = None):
         estat = env.reset()
         millor_resposta = None
         millor_puntuacio = -float('inf')
+        
         logger.info("Iniciant l'avaluació del model RL...")
         for i in range(500):
             accio, _estats = rl_model.predict(estat, deterministic=False)
@@ -242,7 +208,7 @@ def pregunta_vigilant(question_text: str, fact1: str = None, fact2: str = None):
 if __name__ == "__main__":
     input_text = "Descriu l'anàlisi de causa arrel del següent incident de seguretat: ..."
     # Genera respostes LLM
-    llm_responses = generate_llm_responses(input_text)
+    llm_responses = generaRespostesLLM(input_text)
     # Crea entrades JSONL
     nom_fitxer = create_jsonl_entries(llm_responses, input_text)
     # Processa amb RL
