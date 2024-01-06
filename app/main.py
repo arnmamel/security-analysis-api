@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, APIRouter
 from app.models.llm_model import generate_text as generate_llm_text
 from app.models.rl_model import process_with_rl
 from app.routes import train_rl, train_llm, qa_with_facts, analyze_question
-from starlette.middleware.wsgi import WSGIMiddleware
+from fastapi.middleware.wsgi import WSGIMiddleware
 import logging
 from .utils.gestio_logs import manage_log_files
 
@@ -43,4 +43,4 @@ app.include_router(train_llm.router, prefix="/train_llm", tags=["Entrenar el mod
 app.include_router(qa_with_facts.router, prefix="/a_with_facts", tags=["Pregunta amb pistes"])
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
