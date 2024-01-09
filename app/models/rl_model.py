@@ -122,7 +122,7 @@ def process_with_rl(nom_fitxer):
         env.add_sample(sample)
 
     # Construim el path cap al model de RL
-    rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model_v3.zip')
+    rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model.zip')
 
     # Check if the path exists
     if os.path.exists(rl_model_path):
@@ -142,7 +142,7 @@ def pregunta_vigilant(question_text: str, fact1: str = None, fact2: str = None, 
     
     try:
         # Construcció del camí cap al model RL
-        rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model_v3.zip')
+        rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model.zip')
 
         # Carregar el model RL
         if not os.path.exists(rl_model_path):
