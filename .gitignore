@@ -169,5 +169,5 @@ dep/*
 logs/*
 registres/*
 Dockerfiles/*
-app/models/embeddings/en-fasttext-news-300d-1M.vectors.npy
+app/models/embeddings/*
 datasets/*
