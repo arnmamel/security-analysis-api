@@ -1,0 +1,75 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_size": 58039,
+  "description": "",
+  "download_checksums": {
+    "C:\\Users\\arnmata\\OneDrive - Universitat Oberta de Catalunya\\TFG\\datasets\\RL\\QASC_Cyber_Dataset\\sample1.jsonl": {
+      "num_bytes": 73798,
+      "checksum": null
+    }
+  },
+  "download_size": 73798,
+  "features": {
+    "id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "question": {
+      "stem": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "choices": [
+        {
+          "text": {
+            "dtype": "string",
+            "_type": "Value"
+          },
+          "label": {
+            "dtype": "string",
+            "_type": "Value"
+          }
+        }
+      ]
+    },
+    "answerKey": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "fact1": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "fact2": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "combinedfact": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "formatted_question": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 131837,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 58039,
+      "num_examples": 104,
+      "dataset_name": "json"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}

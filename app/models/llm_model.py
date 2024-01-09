@@ -29,11 +29,11 @@ def inicialitzaModelLLM(checkpoint='MBZUAI/LaMini-T5-738M', directori_model=''):
             else:
                 # Carrega el model de la còpia de seguretat
                 logger.info(f"Carregant el model local des de: {ruta_or}")
-                pipe_ret = carregaModelEntrenat(ruta_or, checkpoint)
+                pipe_ret = carregaModelEntrenat(ruta_or)
         else:
             # Carrega el model d'entrenament
             logger.info(f"Carregant el model local des de: {ruta_tr}")
-            pipe_ret = carregaModelEntrenat(ruta_tr, checkpoint)
+            pipe_ret = carregaModelEntrenat(ruta_tr)
     except Exception as e:
         logger.error(f"[LLM BE] Error en la inicialització del model LLM: {e}")
         raise
@@ -61,21 +61,23 @@ def descarregaModel(checkpoint, ruta_model):
     
     return pipeline('text2text-generation', model=model, tokenizer=checkpoint)
 
-def carregaModelEntrenat(ruta_model, checkpoint):
+def carregaModelEntrenat(ruta_model):
     """
     Carrega un model entrenat des de la ruta especificada.
     """
     try:
         logger.info(f"Carregant el model des de: {ruta_model}")
-        tokenizer = AutoTokenizer.from_pretrained(checkpoint)
-        model = AutoModelForSeq2SeqLM.from_pretrained(ruta_model)
-        pipe = pipeline('text2text-generation', model=model, tokenizer=tokenizer)
-        
+        # Carreguem el tokenizer des de la ruta local
+        tokenizer_path = os.path.join(ruta_model, 'tokenizer')
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+        checkpoint = AutoModelForSeq2SeqLM.from_pretrained(ruta_model)
+        model = pipeline('text2text-generation', model=checkpoint, tokenizer=tokenizer)
+
     except Exception as e:
         logger.error(f"[LLM BE] Error en la càrrega del model LLM: {e}")
         raise
-    
-    return pipe
+
+    return model
 
 def desaIBackupModel(model, directori_model=''):
     """

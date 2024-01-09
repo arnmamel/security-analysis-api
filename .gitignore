@@ -168,3 +168,6 @@ tmp/*
 dep/*
 logs/*
 registres/*
+Dockerfiles/*
+app/models/embeddings/en-fasttext-news-300d-1M.vectors.npy
+datasets/*

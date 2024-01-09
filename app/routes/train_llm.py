@@ -55,6 +55,8 @@ def train_llm_model(ruta_entrenament_csv, ruta_avaluacio_csv=""):
         copia_llm(llm_model_path, llm_or_path)
         
         model.save_pretrained(llm_model_path)
+        
+        tokenizer.save_pretrained(os.path.join(llm_model_path, 'tokenizer'))
             
         # resultats_metrics = entrenador.evaluate()
 

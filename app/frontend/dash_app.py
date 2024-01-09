@@ -1,25 +1,22 @@
 # dash_app.py
 import dash
-from dash import Dash, html, dcc, Input, Output, State, callback_context, callback
+from dash import html, dcc, Input, Output, State, callback_context, callback
 import requests
-import json
-import plotly.express as px
-import plotly.graph_objs as go
-import logging
-import os
 import base64
 import uuid
+import os
 from datetime import datetime
+import logging
 
-# Obtenim el logger unificat de l'aplicació
+# Obté el registre unificat de l'aplicació
 logger = logging.getLogger('dash')
 
-# Inicialitzem l'aplicació Dash
+# Inicia l'aplicació Dash
 dash_app = dash.Dash(__name__, requests_pathname_prefix='/dash/')
 
-# Definim el disseny de la nostra aplicació Dash
+# Defineix el disseny de l'aplicació Dash
 dash_app.layout = html.Div([
-    html.H1("Frontend Interface for Interacting with RL and LLM Models", style={'textAlign': 'center'}),
+    html.H1("Interfície Frontend per Interaccionar amb Models RL i LLM", style={'textAlign': 'center'}),
     html.Div([
         # Left Column
         html.Div([
@@ -27,18 +24,18 @@ dash_app.layout = html.Div([
             dcc.Loading(id="loading-indicator", children=[html.Div(id="loading-content")], type="circle"),
             # QA with Facts Section
             html.Div([
-                html.H3("Ask CyberVigilant a Question with Two Clues (facts)"),
-                dcc.Input(id='input-question', type='text', maxLength=1024, placeholder="Enter your question"),
-                dcc.Input(id='input-hint1', type='text', maxLength=150, placeholder="Clue 1"),
-                dcc.Input(id='input-hint2', type='text', maxLength=150, placeholder="Clue 2"),
-                html.Button('Send', id='button-qa-with-facts')
+                html.H3("Enviar una pregunta al CyberVigilant (LLM) amb dues pistes (facts)"),
+                dcc.Input(id='input-question', type='text', maxLength=1024, placeholder="Introdueix la pregunta"),
+                dcc.Input(id='input-hint1', type='text', maxLength=150, placeholder="Pista 1"),
+                dcc.Input(id='input-hint2', type='text', maxLength=150, placeholder="Pista 2"),
+                html.Button('Analitzar', id='button-qa-with-facts')
             ], className='section'),
 
             # Analyze Questions Section
             html.Div([
-                html.H3("Ask CyberVigilant to Analyze a Question"),
-                dcc.Input(id='input-analyze-question', type='text', maxLength=1024, placeholder="Enter your question"),
-                html.Button('Analyze', id='button-analyze-question')
+                html.H3("Enviar una pregunta al CyberVigilant (LLM)"),
+                dcc.Input(id='input-analyze-question', type='text', maxLength=1024, placeholder="Introdueix la pregunta"),
+                html.Button('Analitzar', id='button-analyze-question')
             ], className='section'),
             
             # RL Model Training Section
@@ -93,7 +90,7 @@ def combined_callback(
     analyze_question_text, qa_question, qa_hint1, qa_hint2,
     rl_file_contents, llm_file_contents, existing_messages
 ):
-    logger.debug("Callback de l'aplicació Dash llençat")
+    logger.debug("Callback de l'aplicació Dash activat")
     ctx = callback_context
     triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
     new_message = None

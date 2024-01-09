@@ -1,11 +1,9 @@
 import gymnasium
-from nlp_gym.data_pools.custom_question_answering_pools import QASC
-from nlp_gym.envs.question_answering.env import QAEnv
 from nlp_gym.data_pools.custom_question_answering_pools import QADataPool, Sample
-import pandas as pd
+from nlp_gym.envs.question_answering.env import QAEnv
 from datasets import load_dataset
 from datetime import datetime
-from transformers import pipeline, AutoModelForSeq2SeqLM, AutoTokenizer
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 from stable_baselines3 import DQN
 import numpy as np
 import os
@@ -44,7 +42,7 @@ class QASC_json(QADataPool):
             sample = Sample(sample_id, question, facts, choices, answer)
             samples.append(sample)
 
-        return QASC(samples)
+        return QASC_json(samples)
 
 def create_jsonl_entries(llm_responses, input_text, h1=None, h2=None):
     # Definició del directori on es desaran les dades
@@ -124,7 +122,7 @@ def process_with_rl(nom_fitxer):
         env.add_sample(sample)
 
     # Construim el path cap al model de RL
-    rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model.zip')
+    rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model_v3.zip')
 
     # Check if the path exists
     if os.path.exists(rl_model_path):
@@ -144,7 +142,7 @@ def pregunta_vigilant(question_text: str, fact1: str = None, fact2: str = None, 
     
     try:
         # Construcció del camí cap al model RL
-        rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model.zip')
+        rl_model_path = os.path.join(os.getcwd(), 'app', 'models', 'rl', 'tr', 'model_v3.zip')
 
         # Carregar el model RL
         if not os.path.exists(rl_model_path):

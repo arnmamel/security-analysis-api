@@ -3,15 +3,13 @@
 # pip -m install -r requirements.txt
 # uvicorn app.main:app --reload
 import uvicorn
-from fastapi import FastAPI, HTTPException, APIRouter
-from app.models.llm_model import generate_text as generate_llm_text
-from app.models.rl_model import process_with_rl
+from fastapi import FastAPI
 from app.routes import train_rl, train_llm, qa_with_facts, analyze_question
 from fastapi.middleware.wsgi import WSGIMiddleware
 import logging
 from .utils.gestio_logs import manage_log_files
 
-# Fem l'import de la Dash app
+# Importem l'app Dash
 from app.frontend.dash_app import dash_app
 
 # Creem un logger per a l'aplicació
@@ -28,7 +26,7 @@ logging.basicConfig(
 logger = logging.getLogger('dash')
 
 # Inicialitzem l'aplicació FastAPI
-app = FastAPI(title="LLM Security Analysis API")
+app = FastAPI(title="API per interactuar amb el model LLM i RL del CyberVigilant")
 app.mount("/dash", WSGIMiddleware(dash_app.server))
 
 # Root endpoint for FastAPI
